@@ -2,6 +2,9 @@ import os
 import requests
 import urllib.parse
 from collections import Counter
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
 
 def get_public_repos(username):
     """
@@ -25,7 +28,7 @@ def get_public_repos(username):
 
 def generate_skills_graph(repos):
     """
-    Generates a Mermaid graph of skills from repository topics.
+    Generates an image of a skills graph from repository topics.
     """
     all_topics = []
     project_topics = []
@@ -35,62 +38,65 @@ def generate_skills_graph(repos):
             project_topics.append(repo['topics'])
 
     if not all_topics:
-        return ""
+        return None
 
     topic_counts = Counter(all_topics)
     
-    # Group topics by count
+    G = nx.Graph()
+
+    # Add nodes
+    for topic in topic_counts:
+        G.add_node(topic)
+
+    # Add edges based on co-occurrence
+    for topics in project_topics:
+        if len(topics) > 1:
+            for i in range(len(topics)):
+                for j in range(i + 1, len(topics)):
+                    t1, t2 = topics[i], topics[j]
+                    if G.has_edge(t1, t2):
+                        G[t1][t2]['weight'] += 0.1
+                    else:
+                        G.add_edge(t1, t2, weight=1)
+
+    if not G.nodes():
+        return None
+        
+    # Hierarchical layout
+    pos = {}
     counts_to_topics = {}
     for topic, count in topic_counts.items():
         if count not in counts_to_topics:
             counts_to_topics[count] = []
         counts_to_topics[count].append(topic)
-
-    # Sort counts in descending order
-    sorted_counts = sorted(counts_to_topics.keys(), reverse=True)
     
-    mermaid_str = "```mermaid\ngraph TD\n"
-
-    def sanitize(topic):
-        """Sanitizes topic names for Mermaid IDs."""
-        return urllib.parse.quote(topic).replace('-', '_').replace(' ', '_')
-
-    # Define nodes and ranks using subgraphs
-    all_sanitized_nodes = {}
-    rank_num = 1
-    for count in sorted_counts:
-        topics_in_rank = counts_to_topics[count]
-        
-        plural = 's' if count > 1 else ''
-        mermaid_str += f'    subgraph "Rank {rank_num} - Used in {count} project{plural}"\n'
-        node_definitions = []
-        for topic in topics_in_rank:
-            sanitized_topic = sanitize(topic)
-            all_sanitized_nodes[topic] = sanitized_topic
-            node_definitions.append(f'{sanitized_topic}["{topic}"]')
-
-        mermaid_str += "        " + "; ".join(node_definitions) + "\n"
-        mermaid_str += "    end\n"
-        rank_num += 1
-
-    # Define links based on co-occurrence in projects
-    links = set()
-    for topics in project_topics:
-        if len(topics) > 1:
-            for i in range(len(topics)):
-                for j in range(i + 1, len(topics)):
-                    t1, t2 = sorted([topics[i], topics[j]])
-                    st1 = all_sanitized_nodes.get(t1)
-                    st2 = all_sanitized_nodes.get(t2)
-                    if st1 and st2:
-                        links.add(f"    {st1} --- {st2}")
+    sorted_unique_counts = sorted(counts_to_topics.keys(), reverse=True)
+    y_levels = {count: i for i, count in enumerate(sorted_unique_counts)}
     
-    if links:
-        mermaid_str += "\n" + "\n".join(sorted(list(links)))
+    for count, topics in counts_to_topics.items():
+        y = y_levels[count]
+        xs = np.linspace(-len(topics)/2, len(topics)/2, len(topics))
+        for i, topic in enumerate(sorted(topics)):
+            pos[topic] = (xs[i] * 1.5, y * 2)
+
+    node_sizes = [topic_counts[n] * 200 for n in G.nodes()]
+    edge_widths = [G[u][v]['weight'] for u, v in G.edges()]
+
+    plt.figure(figsize=(24, 24), dpi=150)
     
-    mermaid_str += "\n```"
+    nx.draw_networkx_nodes(G, pos, node_size=node_sizes, node_color='skyblue', alpha=0.8)
+    nx.draw_networkx_edges(G, pos, width=edge_widths, alpha=0.2, edge_color='gray')
+    nx.draw_networkx_labels(G, pos, font_size=9, font_family='sans-serif', font_weight='bold')
     
-    return mermaid_str
+    plt.title('Skills Graph', size=30)
+    plt.axis('off')
+    plt.tight_layout()
+    
+    graph_path = "skills_graph.png"
+    plt.savefig(graph_path, format='png', bbox_inches='tight')
+    plt.close()
+    
+    return graph_path
 
 def update_readme(username):
     """
@@ -122,7 +128,7 @@ def update_readme(username):
         projects_md += f"| [{repo['name']}]({repo['html_url']}) | {description} | {skills_badges} |\n"
 
     # Generate skills graph
-    skills_graph_md = generate_skills_graph(repos)
+    graph_path = generate_skills_graph(repos)
 
     # Read the existing README content
     try:
@@ -158,11 +164,14 @@ def update_readme(username):
         end_index = readme_content.find(end_graph_placeholder)
         
         # Build the new README content for skills graph
+        if graph_path:
+            skills_graph_md = f"\n![Skills Graph]({graph_path})\n"
+        else:
+            skills_graph_md = "\n_Could not generate skills graph._\n"
+        
         readme_content = (
             readme_content[:start_index]
-            + "\n"
             + skills_graph_md
-            + "\n"
             + readme_content[end_index:]
         )
 
