@@ -2,9 +2,6 @@ import os
 import requests
 import urllib.parse
 from collections import Counter
-import matplotlib.pyplot as plt
-import networkx as nx
-import numpy as np
 
 def get_public_repos(username):
     """
@@ -26,81 +23,9 @@ def get_public_repos(username):
             return None
     return repos
 
-def generate_skills_graph(repos):
-    """
-    Generates an image of a skills graph from repository topics.
-    """
-    all_topics = []
-    project_topics = []
-    for repo in repos:
-        if repo['topics']:
-            all_topics.extend(repo['topics'])
-            project_topics.append(repo['topics'])
-
-    if not all_topics:
-        return None
-
-    topic_counts = Counter(all_topics)
-    
-    G = nx.Graph()
-
-    # Add nodes
-    for topic in topic_counts:
-        G.add_node(topic)
-
-    # Add edges based on co-occurrence
-    for topics in project_topics:
-        if len(topics) > 1:
-            for i in range(len(topics)):
-                for j in range(i + 1, len(topics)):
-                    t1, t2 = topics[i], topics[j]
-                    if G.has_edge(t1, t2):
-                        G[t1][t2]['weight'] += 0.1
-                    else:
-                        G.add_edge(t1, t2, weight=1)
-
-    if not G.nodes():
-        return None
-        
-    # Hierarchical layout
-    pos = {}
-    counts_to_topics = {}
-    for topic, count in topic_counts.items():
-        if count not in counts_to_topics:
-            counts_to_topics[count] = []
-        counts_to_topics[count].append(topic)
-    
-    sorted_unique_counts = sorted(counts_to_topics.keys(), reverse=True)
-    y_levels = {count: i for i, count in enumerate(sorted_unique_counts)}
-    
-    for count, topics in counts_to_topics.items():
-        y = y_levels[count]
-        xs = np.linspace(-len(topics)/2, len(topics)/2, len(topics))
-        for i, topic in enumerate(sorted(topics)):
-            pos[topic] = (xs[i] * 1.5, y * 2)
-
-    node_sizes = [topic_counts[n] * 200 for n in G.nodes()]
-    edge_widths = [G[u][v]['weight'] for u, v in G.edges()]
-
-    plt.figure(figsize=(24, 24), dpi=150)
-    
-    nx.draw_networkx_nodes(G, pos, node_size=node_sizes, node_color='skyblue', alpha=0.8)
-    nx.draw_networkx_edges(G, pos, width=edge_widths, alpha=0.2, edge_color='gray')
-    nx.draw_networkx_labels(G, pos, font_size=9, font_family='sans-serif', font_weight='bold')
-    
-    plt.title('Skills Graph', size=30)
-    plt.axis('off')
-    plt.tight_layout()
-    
-    graph_path = "skills_graph.png"
-    plt.savefig(graph_path, format='png', bbox_inches='tight')
-    plt.close()
-    
-    return graph_path
-
 def update_readme(username):
     """
-    Updates the README.md file with a list of public repositories and a skills graph.
+    Updates the README.md file with a list of public repositories and top skills.
     """
     repos = get_public_repos(username)
     if repos is None:
@@ -108,6 +33,17 @@ def update_readme(username):
 
     # Sort repositories by last updated time, descending
     repos.sort(key=lambda x: x['updated_at'], reverse=True)
+
+    # --- Generate skills list ---
+    all_topics = [topic for repo in repos if repo.get('topics') for topic in repo['topics']]
+    top_skills = [skill for skill, count in Counter(all_topics).most_common(10)]
+    
+    colors = ['blue', 'green', 'yellow', 'orange', 'red', 'purple', 'pink', 'brightgreen', 'success', 'important']
+
+    skills_md = " ".join([
+        f"![{skill}](https://img.shields.io/badge/{urllib.parse.quote(skill)}-{colors[i % len(colors)]}?style=for-the-badge&logo={urllib.parse.quote(skill.lower())}&logoColor=white)"
+        for i, skill in enumerate(top_skills)
+    ])
 
     # Generate the Markdown table of projects
     projects_md = "| Project | Description | Skills |\n"
@@ -127,9 +63,6 @@ def update_readme(username):
             
         projects_md += f"| [{repo['name']}]({repo['html_url']}) | {description} | {skills_badges} |\n"
 
-    # Generate skills graph
-    graph_path = generate_skills_graph(repos)
-
     # Read the existing README content
     try:
         with open("README.md", "r") as f:
@@ -138,47 +71,21 @@ def update_readme(username):
         print("README.md not found.")
         return
 
-    # Use placeholders to find and replace the projects list
-    start_placeholder = "<!-- PROJECTS_LIST -->"
-    end_placeholder = "<!-- PROJECTS_LIST_END -->"
+    # Use placeholders to find and replace the content
+    def replace_between(content, start, end, new_text):
+        if start in content and end in content:
+            start_index = content.find(start) + len(start)
+            end_index = content.find(end)
+            return content[:start_index] + "\n" + new_text + "\n" + content[end_index:]
+        return content
 
-    if start_placeholder in readme_content and end_placeholder in readme_content:
-        # Find the content between placeholders
-        start_index = readme_content.find(start_placeholder) + len(start_placeholder)
-        end_index = readme_content.find(end_placeholder)
-        
-        # Build the new README content for projects
-        readme_content = (
-            readme_content[:start_index]
-            + "\n"
-            + projects_md
-            + readme_content[end_index:]
-        )
-
-    # Use placeholders to find and replace the skills graph
-    start_graph_placeholder = "<!-- SKILLS_GRAPH -->"
-    end_graph_placeholder = "<!-- SKILLS_GRAPH_END -->"
-
-    if start_graph_placeholder in readme_content and end_graph_placeholder in readme_content:
-        start_index = readme_content.find(start_graph_placeholder) + len(start_graph_placeholder)
-        end_index = readme_content.find(end_graph_placeholder)
-        
-        # Build the new README content for skills graph
-        if graph_path:
-            skills_graph_md = f"\n![Skills Graph]({graph_path})\n"
-        else:
-            skills_graph_md = "\n_Could not generate skills graph._\n"
-        
-        readme_content = (
-            readme_content[:start_index]
-            + skills_graph_md
-            + readme_content[end_index:]
-        )
-
+    readme_content = replace_between(readme_content, "<!-- SKILLS_LIST -->", "<!-- SKILLS_LIST_END -->", skills_md)
+    readme_content = replace_between(readme_content, "<!-- PROJECTS_LIST -->", "<!-- PROJECTS_LIST_END -->", projects_md)
+    
     # Write the updated content back to the README file
     with open("README.md", "w") as f:
         f.write(readme_content)
-    print("README.md updated successfully with the project list and skills graph.")
+    print("README.md updated successfully with skills and project list.")
 
 if __name__ == "__main__":
     github_username = "Krasnomakov"

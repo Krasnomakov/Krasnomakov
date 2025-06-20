@@ -1,3 +1,9 @@
+### 💻 My Skills
+
+<!-- SKILLS_LIST -->
+![python](https://img.shields.io/badge/python-blue?style=for-the-badge&logo=python&logoColor=white) ![flask](https://img.shields.io/badge/flask-green?style=for-the-badge&logo=flask&logoColor=white) ![llm](https://img.shields.io/badge/llm-yellow?style=for-the-badge&logo=llm&logoColor=white) ![ollama](https://img.shields.io/badge/ollama-orange?style=for-the-badge&logo=ollama&logoColor=white) ![ufw](https://img.shields.io/badge/ufw-red?style=for-the-badge&logo=ufw&logoColor=white) ![c](https://img.shields.io/badge/c-purple?style=for-the-badge&logo=c&logoColor=white) ![github](https://img.shields.io/badge/github-pink?style=for-the-badge&logo=github&logoColor=white) ![github-api](https://img.shields.io/badge/github-api-brightgreen?style=for-the-badge&logo=github-api&logoColor=white) ![attention-visualization](https://img.shields.io/badge/attention-visualization-success?style=for-the-badge&logo=attention-visualization&logoColor=white) ![css3](https://img.shields.io/badge/css3-important?style=for-the-badge&logo=css3&logoColor=white)
+<!-- SKILLS_LIST_END -->
+
 ### 🚀 My Projects
 
 This list is automatically updated from my public repositories.
@@ -14,17 +20,7 @@ This list is automatically updated from my public repositories.
 | [soc_mvp](https://github.com/Krasnomakov/soc_mvp) | Minimal configuration for Security Operations Center | ![apple-metal](https://img.shields.io/badge/apple-metal-white?style=for-the-badge&logo=apple-metal&logoColor=black) ![caldera](https://img.shields.io/badge/caldera-white?style=for-the-badge&logo=caldera&logoColor=black) ![html](https://img.shields.io/badge/html-white?style=for-the-badge&logo=html&logoColor=black) ![ids](https://img.shields.io/badge/ids-white?style=for-the-badge&logo=ids&logoColor=black) ![linux](https://img.shields.io/badge/linux-white?style=for-the-badge&logo=linux&logoColor=black) ![mitre-attack](https://img.shields.io/badge/mitre-attack-white?style=for-the-badge&logo=mitre-attack&logoColor=black) ![plotlyjs](https://img.shields.io/badge/plotlyjs-white?style=for-the-badge&logo=plotlyjs&logoColor=black) ![python](https://img.shields.io/badge/python-white?style=for-the-badge&logo=python&logoColor=black) ![siem](https://img.shields.io/badge/siem-white?style=for-the-badge&logo=siem&logoColor=black) ![snort](https://img.shields.io/badge/snort-white?style=for-the-badge&logo=snort&logoColor=black) ![ssh](https://img.shields.io/badge/ssh-white?style=for-the-badge&logo=ssh&logoColor=black) ![streamlit](https://img.shields.io/badge/streamlit-white?style=for-the-badge&logo=streamlit&logoColor=black) ![sysmon](https://img.shields.io/badge/sysmon-white?style=for-the-badge&logo=sysmon&logoColor=black) ![ubuntu](https://img.shields.io/badge/ubuntu-white?style=for-the-badge&logo=ubuntu&logoColor=black) ![ufw](https://img.shields.io/badge/ufw-white?style=for-the-badge&logo=ufw&logoColor=black) ![wazuh](https://img.shields.io/badge/wazuh-white?style=for-the-badge&logo=wazuh&logoColor=black) |
 | [cs_research](https://github.com/Krasnomakov/cs_research) | Receivers, transmitters, sweeps, etc. | ![air-gap](https://img.shields.io/badge/air-gap-white?style=for-the-badge&logo=air-gap&logoColor=black) ![c](https://img.shields.io/badge/c-white?style=for-the-badge&logo=c&logoColor=black) ![covert-channel](https://img.shields.io/badge/covert-channel-white?style=for-the-badge&logo=covert-channel&logoColor=black) ![gqrx](https://img.shields.io/badge/gqrx-white?style=for-the-badge&logo=gqrx&logoColor=black) ![mfsk](https://img.shields.io/badge/mfsk-white?style=for-the-badge&logo=mfsk&logoColor=black) ![ook](https://img.shields.io/badge/ook-white?style=for-the-badge&logo=ook&logoColor=black) ![python](https://img.shields.io/badge/python-white?style=for-the-badge&logo=python&logoColor=black) ![sdr](https://img.shields.io/badge/sdr-white?style=for-the-badge&logo=sdr&logoColor=black) ![telnet](https://img.shields.io/badge/telnet-white?style=for-the-badge&logo=telnet&logoColor=black) |
 | [EventDrivenArchitecture](https://github.com/Krasnomakov/EventDrivenArchitecture) | Prototypes of Event-Driven Architecture with Computer Vision, games, aniamtion and LLM models | ![ai](https://img.shields.io/badge/ai-white?style=for-the-badge&logo=ai&logoColor=black) ![c](https://img.shields.io/badge/c-white?style=for-the-badge&logo=c&logoColor=black) ![computer-vision](https://img.shields.io/badge/computer-vision-white?style=for-the-badge&logo=computer-vision&logoColor=black) ![cpp](https://img.shields.io/badge/cpp-white?style=for-the-badge&logo=cpp&logoColor=black) ![cuda](https://img.shields.io/badge/cuda-white?style=for-the-badge&logo=cuda&logoColor=black) ![cuda-programming](https://img.shields.io/badge/cuda-programming-white?style=for-the-badge&logo=cuda-programming&logoColor=black) ![event-driven](https://img.shields.io/badge/event-driven-white?style=for-the-badge&logo=event-driven&logoColor=black) ![gpu-acceleration](https://img.shields.io/badge/gpu-acceleration-white?style=for-the-badge&logo=gpu-acceleration&logoColor=black) ![jetson-nano](https://img.shields.io/badge/jetson-nano-white?style=for-the-badge&logo=jetson-nano&logoColor=black) ![opencv](https://img.shields.io/badge/opencv-white?style=for-the-badge&logo=opencv&logoColor=black) ![python](https://img.shields.io/badge/python-white?style=for-the-badge&logo=python&logoColor=black) |
+
 <!-- PROJECTS_LIST_END -->
-
-### 💡 Skills Graph
-
-<details>
-<summary>Click to see my skills graph</summary>
-
-<!-- SKILLS_GRAPH -->
-![Skills Graph](skills_graph.png)
-<!-- SKILLS_GRAPH_END -->
-
-</details>
 
 --- 
