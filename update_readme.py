@@ -61,7 +61,8 @@ def generate_skills_graph(repos):
     for count in sorted_counts:
         topics_in_rank = counts_to_topics[count]
         
-        mermaid_str += f"    subgraph Rank {rank_num} - Used in {count} project(s)\n"
+        plural = 's' if count > 1 else ''
+        mermaid_str += f'    subgraph "Rank {rank_num} - Used in {count} project{plural}"\n'
         node_definitions = []
         for topic in topics_in_rank:
             sanitized_topic = sanitize(topic)

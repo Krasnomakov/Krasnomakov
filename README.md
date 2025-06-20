@@ -24,13 +24,13 @@ This list is automatically updated from my public repositories.
 <!-- SKILLS_GRAPH -->
 ```mermaid
 graph TD
-    subgraph Rank 1 - Used in 7 project(s)
+    subgraph "Rank 1 - Used in 7 projects"
         python["python"]
     end
-    subgraph Rank 2 - Used in 2 project(s)
+    subgraph "Rank 2 - Used in 2 projects"
         flask["flask"]; llm["llm"]; ollama["ollama"]; ufw["ufw"]; c["c"]
     end
-    subgraph Rank 3 - Used in 1 project(s)
+    subgraph "Rank 3 - Used in 1 project"
         github["github"]; github_api["github-api"]; attention_visualization["attention-visualization"]; css3["css3"]; html5["html5"]; javascript["javascript"]; openapi["openapi"]; transformers["transformers"]; api["api"]; chat["chat"]; chromadb["chromadb"]; langchain["langchain"]; ollama_docker["ollama-docker"]; sensors["sensors"]; event_log["event-log"]; matplotlib["matplotlib"]; simpy["simpy"]; simulation["simulation"]; embedded_c["embedded-c"]; fpga["fpga"]; gowin_eda["gowin-eda"]; uart_protocol["uart-protocol"]; verilog["verilog"]; vhdl["vhdl"]; vivado["vivado"]; yosys["yosys"]; ossec_agent["ossec-agent"]; sysmon_config["sysmon-config"]; wazuh_rules["wazuh-rules"]; apple_metal["apple-metal"]; caldera["caldera"]; html["html"]; ids["ids"]; linux["linux"]; mitre_attack["mitre-attack"]; plotlyjs["plotlyjs"]; siem["siem"]; snort["snort"]; ssh["ssh"]; streamlit["streamlit"]; sysmon["sysmon"]; ubuntu["ubuntu"]; wazuh["wazuh"]; air_gap["air-gap"]; covert_channel["covert-channel"]; gqrx["gqrx"]; mfsk["mfsk"]; ook["ook"]; sdr["sdr"]; telnet["telnet"]; ai["ai"]; computer_vision["computer-vision"]; cpp["cpp"]; cuda["cuda"]; cuda_programming["cuda-programming"]; event_driven["event-driven"]; gpu_acceleration["gpu-acceleration"]; jetson_nano["jetson-nano"]; opencv["opencv"]
     end
 
