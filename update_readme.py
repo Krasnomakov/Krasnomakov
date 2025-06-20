@@ -1,5 +1,6 @@
 import os
 import requests
+import urllib.parse
 
 def get_public_repos(username):
     """
@@ -32,13 +33,23 @@ def update_readme(username):
     # Sort repositories by last updated time, descending
     repos.sort(key=lambda x: x['updated_at'], reverse=True)
 
-    # Generate the Markdown list of projects
-    projects_md = ""
+    # Generate the Markdown table of projects
+    projects_md = "| Project | Description | Skills |\n"
+    projects_md += "|---|---|---|\n"
     for repo in repos:
-        projects_md += f"- [{repo['name']}]({repo['html_url']}) - {repo.get('description', 'No description')}\n"
+        # Prepare skills badges
+        skills_badges = ""
         if repo['topics']:
-            skills = " ".join([f"`{topic}`" for topic in repo['topics']])
-            projects_md += f"  - **Skills**: {skills}\n"
+            skills_badges = " ".join([
+                f"![{topic}](https://img.shields.io/badge/{urllib.parse.quote(topic)}-white?style=for-the-badge&logo={urllib.parse.quote(topic.lower())}&logoColor=black)"
+                for topic in repo['topics']
+            ])
+        
+        description = repo.get('description', 'No description')
+        if description is None:
+            description = 'No description'
+            
+        projects_md += f"| [{repo['name']}]({repo['html_url']}) | {description} | {skills_badges} |\n"
 
     # Read the existing README content
     try:
@@ -60,7 +71,7 @@ def update_readme(username):
         # Build the new README content
         new_readme = (
             readme_content[:start_index]
-            + "\n\n"
+            + "\n"
             + projects_md
             + "\n"
             + readme_content[end_index:]
