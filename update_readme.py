@@ -1,7 +1,6 @@
 import os
 import requests
 import urllib.parse
-from collections import Counter
 
 def get_public_repos(username):
     """
@@ -25,7 +24,7 @@ def get_public_repos(username):
 
 def update_readme(username):
     """
-    Updates the README.md file with a list of public repositories and top skills.
+    Updates the README.md file with a list of public repositories.
     """
     repos = get_public_repos(username)
     if repos is None:
@@ -33,17 +32,6 @@ def update_readme(username):
 
     # Sort repositories by last updated time, descending
     repos.sort(key=lambda x: x['updated_at'], reverse=True)
-
-    # --- Generate skills list ---
-    all_topics = [topic for repo in repos if repo.get('topics') for topic in repo['topics']]
-    top_skills = [skill for skill, count in Counter(all_topics).most_common(10)]
-    
-    colors = ['blue', 'green', 'yellow', 'orange', 'red', 'purple', 'pink', 'brightgreen', 'success', 'important']
-
-    skills_md = " ".join([
-        f"![{skill}](https://img.shields.io/badge/{urllib.parse.quote(skill)}-{colors[i % len(colors)]}?style=for-the-badge&logo={urllib.parse.quote(skill.lower())}&logoColor=white)"
-        for i, skill in enumerate(top_skills)
-    ])
 
     # Generate the Markdown table of projects
     projects_md = "| Project | Description | Skills |\n"
@@ -71,21 +59,30 @@ def update_readme(username):
         print("README.md not found.")
         return
 
-    # Use placeholders to find and replace the content
-    def replace_between(content, start, end, new_text):
-        if start in content and end in content:
-            start_index = content.find(start) + len(start)
-            end_index = content.find(end)
-            return content[:start_index] + "\n" + new_text + "\n" + content[end_index:]
-        return content
+    # Use placeholders to find and replace the projects list
+    start_placeholder = "<!-- PROJECTS_LIST -->"
+    end_placeholder = "<!-- PROJECTS_LIST_END -->"
 
-    readme_content = replace_between(readme_content, "<!-- SKILLS_LIST -->", "<!-- SKILLS_LIST_END -->", skills_md)
-    readme_content = replace_between(readme_content, "<!-- PROJECTS_LIST -->", "<!-- PROJECTS_LIST_END -->", projects_md)
-    
-    # Write the updated content back to the README file
-    with open("README.md", "w") as f:
-        f.write(readme_content)
-    print("README.md updated successfully with skills and project list.")
+    if start_placeholder in readme_content and end_placeholder in readme_content:
+        # Find the content between placeholders
+        start_index = readme_content.find(start_placeholder) + len(start_placeholder)
+        end_index = readme_content.find(end_placeholder)
+        
+        # Build the new README content
+        new_readme = (
+            readme_content[:start_index]
+            + "\n"
+            + projects_md
+            + "\n"
+            + readme_content[end_index:]
+        )
+
+        # Write the updated content back to the README file
+        with open("README.md", "w") as f:
+            f.write(new_readme)
+        print("README.md updated successfully with the project list.")
+    else:
+        print("Placeholders not found in README.md. Could not update the project list.")
 
 if __name__ == "__main__":
     github_username = "Krasnomakov"
