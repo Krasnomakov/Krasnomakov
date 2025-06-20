@@ -3,7 +3,7 @@
 This list is automatically updated from my public repositories.
 
 <!-- PROJECTS_LIST -->
-- [Krasnomakov](https://github.com/Krasnomakov/Krasnomakov) - None
+
 - [EventDrivenArchitecture](https://github.com/Krasnomakov/EventDrivenArchitecture) - Prototypes of Event-Driven Architecture with Computer Vision, games, aniamtion and LLM models
 - [cs_research](https://github.com/Krasnomakov/cs_research) - Receivers, transmitters, sweeps, etc.
 - [soc_mvp](https://github.com/Krasnomakov/soc_mvp) - Minimal configuration for Security Operations Center

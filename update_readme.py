@@ -36,6 +36,9 @@ def update_readme(username):
     projects_md = ""
     for repo in repos:
         projects_md += f"- [{repo['name']}]({repo['html_url']}) - {repo.get('description', 'No description')}\n"
+        if repo['topics']:
+            skills = " ".join([f"`{topic}`" for topic in repo['topics']])
+            projects_md += f"  - **Skills**: {skills}\n"
 
     # Read the existing README content
     try:
@@ -57,7 +60,7 @@ def update_readme(username):
         # Build the new README content
         new_readme = (
             readme_content[:start_index]
-            + "\n"
+            + "\n\n"
             + projects_md
             + "\n"
             + readme_content[end_index:]
