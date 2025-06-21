@@ -2,9 +2,11 @@ name: Update README
 
 on:
   schedule:
-    # Runs every 24 hours
     - cron: '0 0 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -28,4 +30,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "docs: auto-update projects list"
-          file_pattern: README.md 
+          file_pattern: README.md
