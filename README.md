@@ -1,4 +1,9 @@
+# Krasnomakov
+
+![My GitHub Game](game.gif)
+
 ### 🚀 My Projects
+
 
 This list is automatically updated from my public repositories.
 
